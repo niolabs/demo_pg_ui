@@ -2,11 +2,11 @@ export default {
   pubkeeper: {
     staticPubkeeper: false,
     pkConfig: {
-      PK_HOST: 'a62b0864-24c3-4142-8fc6-a3a97bff8098.pubkeeper.nio.works',
+      PK_HOST: '',
       PK_PORT: 443,
       PK_SECURE: true,
-      PK_JWT: '5e64ecd89682c6dcb87c368f6fb27c79231d79881e7986ab6b1b21839bfa37b2',
-      WS_HOST: 'a62b0864-24c3-4142-8fc6-a3a97bff8098.websocket.nio.works',
+      PK_JWT: '',
+      WS_HOST: '',
       WS_PORT: 443,
       WS_SECURE: true,
     },
