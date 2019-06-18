@@ -61,7 +61,7 @@ export default class Page extends React.Component {
               <h5 className="m-0">Scale</h5>
               <hr />
               <h1 className="mb-1">
-                {weight || 0}
+                {weight === null ? '-' : weight}
               </h1>
               <b>{units || '-'}</b>
             </CardBody>
