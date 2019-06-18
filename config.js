@@ -1,6 +1,6 @@
 export default {
   pubkeeper: {
-    staticPubkeeper: true,
+    staticPubkeeper: false,
     pkConfig: {
       PK_HOST: 'a62b0864-24c3-4142-8fc6-a3a97bff8098.pubkeeper.nio.works',
       PK_PORT: 443,
