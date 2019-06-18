@@ -80,13 +80,10 @@ export default class Page extends React.Component {
           <div id="log">
             {log && log.map(l => (
               <Row key={`${l.time}${l.value}`}>
-                <Col xs="3" className={l.className}>
-                  {l.time}
+                <Col xs="4" className={l.className}>
+                  {l.time}&nbsp;::&nbsp;{l.topic}
                 </Col>
-                <Col xs="2" className={l.className}>
-                  {l.topic}
-                </Col>
-                <Col xs="6" className={l.className}>
+                <Col xs="8" className={l.className}>
                   {l.value}
                 </Col>
               </Row>
