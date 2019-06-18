@@ -31,14 +31,11 @@ export default class Page extends React.Component {
         className: topic === 'error' ? 'text-danger' : topic === 'completed' ? 'text-success' : 'text-default',
         value: JSON.stringify(newData)
       });
+      this.setState({ log });
     }
     if (topic !== 'completed') {
-      newData.log = log;
       this.setState(newData);
-    } else {
-      this.setState({ log })
     }
-
   };
 
   render = () => {
@@ -81,7 +78,19 @@ export default class Page extends React.Component {
         </Col>
         <Col xs="12">
           <div id="log">
-            {log && log.map(l => (<div key={l.value} className={l.className}>{l.time} :: {l.topic} :: {l.value}</div>))}
+            {log && log.map(l => (
+              <Row key={`${l.time}${l.value}`}>
+                <Col xs="3" className={l.className}>
+                  {l.time}
+                </Col>
+                <Col xs="2" className={l.className}>
+                  {l.topic}
+                </Col>
+                <Col xs="6" className={l.className}>
+                  {l.value}
+                </Col>
+              </Row>
+            ))}
           </div>
         </Col>
       </Row>
