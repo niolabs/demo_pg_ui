@@ -26,6 +26,7 @@ export default class Page extends React.Component {
     console.log(newData);
     if (topic !== 'weights') {
       log.unshift({
+        time: new Date().toLocaleString(),
         topic,
         className: topic === 'error' ? 'text-danger' : topic === 'completed' ? 'text-success' : 'text-default',
         value: JSON.stringify(newData)
@@ -80,7 +81,7 @@ export default class Page extends React.Component {
         </Col>
         <Col xs="12">
           <div id="log">
-            {log && log.map(l => (<div key={l.value} className={l.className}>{l.topic}: {l.value}</div>))}
+            {log && log.map(l => (<div key={l.value} className={l.className}>{l.time} :: {l.topic} :: {l.value}</div>))}
           </div>
         </Col>
       </Row>
