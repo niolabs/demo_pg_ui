@@ -60,10 +60,10 @@ export default class Page extends React.Component {
             <CardBody className="p-3 pg-card">
               <h5 className="m-0">Scale</h5>
               <hr />
-              <h1 className="mb-1">
-                {weight === null ? '-' : weight}
+              <h1 className={weight === null ? 'text-danger' : 'mb-1'}>
+                {weight === null ? 'OFF' : weight}
               </h1>
-              <b>{units || '-'}</b>
+              <b>{weight !== null && units}</b>
             </CardBody>
           </Card>
         </Col>
