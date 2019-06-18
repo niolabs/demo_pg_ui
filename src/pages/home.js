@@ -24,8 +24,13 @@ export default class Page extends React.Component {
     const newData = Array.isArray(JSON.parse(json)) ? JSON.parse(json)[0] : JSON.parse(json);
 
     console.log(newData);
-
-    log.unshift({ topic, className: topic === 'error' ? 'text-danger' : topic === 'completed' ? 'text-success' : 'text-default', value: JSON.stringify(newData) });
+    if (topic !== 'weights') {
+      log.unshift({
+        topic,
+        className: topic === 'error' ? 'text-danger' : topic === 'completed' ? 'text-success' : 'text-default',
+        value: JSON.stringify(newData)
+      });
+    }
     if (topic !== 'completed') {
       newData.log = log;
       this.setState(newData);
