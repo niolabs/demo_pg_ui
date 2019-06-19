@@ -31,10 +31,6 @@ class App extends Component {
     this.setState({ configOpen: false });
   };
 
-  toggleNav = (close) => {
-    this.setState({ navOpen: close ? false : !this.state.navOpen });
-  };
-
   render = () => {
     const { navOpen, configOpen } = this.state;
     const auth = isAuthenticated();

@@ -3,15 +3,13 @@ import PropTypes from 'prop-types';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 
 export default class Page extends React.Component {
-  state = { barcode: null, units: null, weight: null, state: null, log: [] };
+  state = { barcode: null, units: null, weight: null, state: null, log: {} };
 
   componentDidMount = () => {
     const { pkClient } = this.props;
-    pkClient.addPatron('barcodes', patron => patron.on('message', (data) => this.writeDataToState(data, 'barcodes')));
-    pkClient.addPatron('cycle', patron => patron.on('message', (data) => this.writeDataToState(data, 'cycle')));
-    pkClient.addPatron('weights', patron => patron.on('message', (data) => this.writeDataToState(data, 'weights')));
-    pkClient.addPatron('error', patron => patron.on('message', (data) => this.writeDataToState(data, 'error')));
-    pkClient.addPatron('completed', patron => patron.on('message', (data) => this.writeDataToState(data, 'completed')));
+    ['barcodes', 'cycle', 'weights', 'error', 'completed'].map(topic => {
+      pkClient.addPatron(topic, patron => patron.on('message', (data) => this.writeDataToState(data, topic)));
+    });
   };
 
   componentWillUnmount = () => {
@@ -20,17 +18,17 @@ export default class Page extends React.Component {
 
   writeDataToState = (data, topic) => {
     const { log } = this.state;
+    const time = new Date().toLocaleString();
     const json = new TextDecoder().decode(data);
     const newData = Array.isArray(JSON.parse(json)) ? JSON.parse(json)[0] : JSON.parse(json);
 
     console.log(newData);
     if (topic !== 'weights') {
-      log.unshift({
-        time: new Date().toLocaleString(),
-        topic,
+      const logKey = `${time} ${topic}`;
+      log[logKey] = {
         className: topic === 'error' ? 'text-danger' : topic === 'completed' ? 'text-success' : 'text-default',
-        value: JSON.stringify(newData)
-      });
+        value: JSON.stringify(newData),
+      };
       this.setState({ log });
     }
     if (topic !== 'completed') {
@@ -78,13 +76,13 @@ export default class Page extends React.Component {
         </Col>
         <Col xs="12">
           <div id="log">
-            {log && log.map(l => (
-              <Row key={`${l.time}${l.value}`}>
-                <Col xs="4" className={l.className}>
-                  {l.time}&nbsp;::&nbsp;{l.topic}
+            {Object.keys(log).reverse().map((k) => (
+              <Row key={k}>
+                <Col xs="4" className={log[k].className}>
+                  {k}
                 </Col>
-                <Col xs="8" className={l.className}>
-                  {l.value}
+                <Col xs="8" className={log[k].className}>
+                  {log[k].value}
                 </Col>
               </Row>
             ))}
