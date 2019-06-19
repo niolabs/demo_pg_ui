@@ -8,7 +8,12 @@ export default class Page extends React.Component {
   componentDidMount = () => {
     const { pkClient } = this.props;
     ['barcodes', 'cycle', 'weights', 'error', 'completed'].map(topic => {
-      pkClient.addPatron(topic, patron => patron.on('message', (data) => this.writeDataToState(data, topic)));
+      pkClient.addPatron(topic, (patron) => {
+        patron.on('message', this.writeDataToState);
+        return () => {
+          patron.off('message', this.writeDataToState)
+        }
+      });
     });
   };
 
@@ -16,13 +21,15 @@ export default class Page extends React.Component {
     if (this.pkClient) this.pkClient.disconnect();
   };
 
-  writeDataToState = (data, topic) => {
+  writeDataToState = (data, meta) => {
     const { log } = this.state;
     const time = new Date().toLocaleString();
     const json = new TextDecoder().decode(data);
     const newData = Array.isArray(JSON.parse(json)) ? JSON.parse(json)[0] : JSON.parse(json);
+    const topic = meta.topic;
 
-    console.log(newData);
+    console.log(topic, newData);
+
     if (topic !== 'weights') {
       const logKey = `${time} ${topic}`;
       log[logKey] = {
