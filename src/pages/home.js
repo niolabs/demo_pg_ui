@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { Card, CardBody, Row, Col } from '@nio/ui-kit';
 
 export default class Page extends React.Component {
-  state = { barcode: null, units: null, weight: null, state: null, log: {} };
+  state = { barcode: null, units: null, weight: null, state: null, log: {}, frame: false };
 
   componentDidMount = () => {
     const { pkClient } = this.props;
-    ['barcodes', 'cycle', 'weights', 'error', 'completed'].map(topic => {
+    ['barcodes', 'cycle', 'weights', 'error', 'completed', 'video'].map(topic => {
       pkClient.addPatron(topic, (patron) => {
         patron.on('message', this.writeDataToState);
         return () => {
@@ -28,8 +28,6 @@ export default class Page extends React.Component {
     const newData = Array.isArray(JSON.parse(json)) ? JSON.parse(json)[0] : JSON.parse(json);
     const topic = meta.topic;
 
-    console.log(topic, newData);
-
     if (topic !== 'weights') {
       const logKey = `${time} ${topic}`;
       log[logKey] = {
@@ -44,7 +42,7 @@ export default class Page extends React.Component {
   };
 
   render = () => {
-    const { barcode, units, weight, state, log } = this.state;
+    const { barcode, units, weight, state, log, frame } = this.state;
     return (
       <Row>
         <Col xs="4" className="text-center">
@@ -81,7 +79,7 @@ export default class Page extends React.Component {
             </CardBody>
           </Card>
         </Col>
-        <Col xs="12">
+        <Col xs="8">
           <div id="log">
             {Object.keys(log).reverse().map((k) => (
               <Row key={k}>
@@ -94,6 +92,13 @@ export default class Page extends React.Component {
               </Row>
             ))}
           </div>
+        </Col>
+        <Col xs="4" className="photo-holder">
+          <Card>
+            <CardBody className="p-3 pg-photo">
+              {frame && (<img src={`data:image/jpeg;base64,${frame}`} width="100%" />)}
+            </CardBody>
+          </Card>
         </Col>
       </Row>
 
